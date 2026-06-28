@@ -516,7 +516,8 @@
             const jdFile = document.getElementById('jdFile').files[0];
             if(!jdFile || window.uploadedResumes.length === 0) return window.showToast("JD and CVs required.", true);
 
-            window.showDashboard();
+            // FIXED: Replaced the undefined window.showDashboard() with exitToDashboard()
+            window.exitToDashboard();
             window.switchMainTab('rankings');
             
             const tableBody = document.getElementById('rankingTableBody');
