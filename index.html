@@ -3,155 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApexTalent | Minimalist ATS</title>
-    <!-- Tailwind CSS for sleek, modern layout control -->
+    <title>Minimalist ATS Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .glow-green { box-shadow: 0 0 10px #22c55e; }
-        /* Smooth scrolling for chat window */
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+        .glow-green { box-shadow: 0 0 8px #22c55e; }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 h-screen flex flex-col overflow-hidden select-none">
+<body class="bg-slate-900 text-slate-100 h-screen flex flex-col overflow-hidden">
 
-    <!-- HEADER NAVIGATION: API Keys & Controls -->
-    <header class="bg-slate-800/90 border-b border-slate-800 px-6 py-3 flex justify-between items-center z-10 shrink-0">
+    <header class="bg-slate-800 border-b border-slate-700 px-6 py-3 flex justify-between items-center z-10">
         <div class="flex items-center space-x-3">
-            <div class="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white tracking-wider text-xs">ATS</div>
-            <h1 class="text-md font-semibold tracking-tight text-slate-200">Apex<span class="text-indigo-400 font-normal">Talent</span></h1>
+            <div class="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white tracking-wider text-sm">ATS</div>
+            <h1 class="text-lg font-semibold tracking-tight text-slate-200">Apex<span class="text-indigo-400 font-normal">Talent</span></h1>
         </div>
         
-        <!-- Key Authentication Panel -->
-        <div class="flex items-center space-x-3 bg-slate-950 p-1.5 rounded-xl border border-slate-800 w-96">
+        <div class="flex items-center space-x-3 bg-slate-900 p-1.5 rounded-lg border border-slate-700 w-96">
             <input type="password" id="apiKeyInput" placeholder="Enter Gemini API Key..." class="bg-transparent text-xs text-slate-300 px-3 py-1.5 w-full focus:outline-none" />
-            <button onclick="connectAPI()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition-all active:scale-95 whitespace-nowrap">
+            <button onclick="connectAPI()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium px-4 py-1.5 rounded-md transition-all active:scale-95 whitespace-nowrap">
                 Connect
             </button>
             <div class="flex items-center pr-2">
-                <span id="apiStatusIndicator" class="h-2.5 w-2.5 rounded-full bg-slate-700 transition-all duration-300"></span>
+                <span id="apiStatusIndicator" class="h-3 w-3 rounded-full bg-slate-600 transition-all duration-300"></span>
             </div>
         </div>
     </header>
 
-    <!-- CORE PLATFORM LAYOUT -->
     <main class="flex flex-1 overflow-hidden w-full">
         
-        <!-- LEFT SIDEBAR: Document Stage & Interactive File Explorer -->
-        <section class="w-1/4 bg-slate-900 border-r border-slate-800 p-5 flex flex-col justify-between overflow-y-auto custom-scrollbar">
+        <section class="w-1/4 bg-slate-800/50 p-6 border-r border-slate-800 flex flex-col justify-between overflow-y-auto">
             <div class="space-y-6">
-                <!-- Dropzone 1: Target Rules Matrix -->
                 <div>
-                    <h2 class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2.5">1. Reference Framework</h2>
-                    <label class="flex flex-col items-center justify-center border border-dashed border-slate-800 hover:border-indigo-500/50 rounded-xl p-4 cursor-pointer bg-slate-800/20 transition-all group">
-                        <svg class="w-5 h-5 text-slate-500 group-hover:text-indigo-400 mb-1 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <span class="text-xs text-slate-400 tracking-wide font-medium" id="jdName">Upload Job Description</span>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">1. Job Description</h2>
+                    <label class="flex flex-col items-center justify-center border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-xl p-4 cursor-pointer bg-slate-800/40 transition">
+                        <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span class="text-xs text-slate-400" id="jdName">Upload JD (PDF/Text)</span>
                         <input type="file" id="jdFile" class="hidden" accept=".pdf,.txt" onchange="updateFileName('jdFile', 'jdName')" />
                     </label>
                 </div>
 
-                <!-- Dropzone 2: Multi-Document Portfolio Array -->
                 <div>
-                    <h2 class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2.5">2. Applicant Portfolios</h2>
-                    <label class="flex flex-col items-center justify-center border border-dashed border-slate-800 hover:border-indigo-500/50 rounded-xl p-5 cursor-pointer bg-slate-800/20 transition-all group">
-                        <svg class="w-5 h-5 text-slate-500 group-hover:text-indigo-400 mb-1 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        <span class="text-xs text-slate-400 tracking-wide font-medium" id="resumeCount">Upload Resumes (Multi-Select)</span>
-                        <input type="file" id="resumeFiles" class="hidden" accept=".pdf,.txt" multiple onchange="registerResumes()" />
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">2. Candidate Resumes</h2>
+                    <label class="flex flex-col items-center justify-center border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-xl p-6 cursor-pointer bg-slate-800/40 transition">
+                        <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        <span class="text-xs text-slate-400 text-center" id="resumeCount">Upload Resumes (Multi-PDF)</span>
+                        <input type="file" id="resumeFiles" class="hidden" accept=".pdf,.txt" multiple onchange="updateResumeCount()" />
                     </label>
-                </div>
-
-                <!-- DYNAMIC FILE EXPLORER COMPONENT -->
-                <div class="pt-2">
-                    <h2 class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2.5">Document Directory</h2>
-                    <div id="resumeList" class="space-y-1.5 max-h-64 overflow-y-auto custom-scrollbar pr-1">
-                        <div class="text-xs text-slate-600 italic px-2">No files currently staged in working memory.</div>
-                    </div>
                 </div>
             </div>
 
-            <!-- Global Compilation Pipeline Trigger -->
-            <button onclick="processApplications()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-medium tracking-wide text-xs transition shadow-lg shadow-indigo-600/10 active:scale-95 mt-6 shrink-0">
-                Execute Context Parsing
+            <button onclick="processApplications()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-medium tracking-wide text-sm transition shadow-lg shadow-indigo-600/10 active:scale-95 mt-6">
+                Analyze & Rank Candidates
             </button>
         </section>
 
-        <!-- CENTER PANEL: DUAL-VIEW WORKING DESK (Dashboard Rankings VS Interactive File Canvas) -->
-        <section class="w-2/4 p-6 overflow-y-auto custom-scrollbar flex flex-col bg-slate-950/40">
-            
-            <!-- VIEW A: RANKING DASHBOARD (Default State) -->
-            <div id="dashboardView" class="flex flex-col h-full">
-                <div class="flex justify-between items-center mb-5">
-                    <div>
-                        <h2 class="text-lg font-bold text-slate-100 tracking-tight">System Evaluation Interface</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Statistical processing array computed from active document vector distributions.</p>
-                    </div>
-                    <span class="bg-slate-900 border border-slate-800 px-3 py-1 text-[10px] tracking-wide text-slate-400 font-medium rounded-full" id="candidateTicker">0 Profiles Indexed</span>
+        <section class="w-2/4 p-8 overflow-y-auto flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-100">Applicant Rankings</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Real-time matching based on extracted technical skills and JD matching metrics.</p>
                 </div>
-
-                <div class="bg-slate-900/80 border border-slate-800 rounded-xl overflow-hidden flex-1 flex flex-col">
-                    <table class="w-full text-left border-collapse flex flex-col h-full">
-                        <thead class="shrink-0 bg-slate-900 border-b border-slate-800">
-                            <tr class="flex text-[11px] font-bold uppercase tracking-wider text-slate-500 py-3 px-4">
-                                <th class="w-12 text-center">Rk</th>
-                                <th class="flex-1 px-4">Applicant Identity & Insight</th>
-                                <th class="w-48 px-2">Identified Alignment Markers</th>
-                                <th class="w-20 text-right">Match</th>
-                            </tr>
-                        </thead>
-                        <tbody id="rankingTableBody" class="divide-y divide-slate-800/40 text-xs overflow-y-auto flex-1 custom-scrollbar">
-                            <tr class="flex w-full">
-                                <td class="w-full text-center py-32 text-slate-600 italic tracking-wide">
-                                    Awaiting matrix data compilation. Mount local file arrays to populate workspace records.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <span class="bg-slate-800 border border-slate-700 px-3 py-1 text-xs text-slate-400 rounded-full" id="candidateTicker">0 Candidates Loaded</span>
             </div>
 
-            <!-- VIEW B: INTERACTIVE DOCUMENT CANVAS (Hidden on initialization, activated on folder tree click) -->
-            <div id="previewView" class="hidden flex flex-col h-full">
-                <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-                    <div class="flex items-center space-x-3">
-                        <button onclick="showDashboard()" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 px-2.5 py-1.5 rounded-lg text-xs transition flex items-center space-x-1.5 font-medium">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                            <span>Dashboard</span>
-                        </button>
-                        <span class="text-sm font-semibold tracking-tight text-indigo-400" id="previewTitle">Document Window</span>
-                    </div>
-                    <span class="text-[10px] font-mono uppercase bg-indigo-950/60 border border-indigo-900/50 text-indigo-400 px-2 py-0.5 rounded">Active Workspace Object</span>
-                </div>
-                <!-- Document Sandbox Insertion Frame -->
-                <div id="previewContent" class="flex-1 bg-slate-900 rounded-xl overflow-hidden border border-slate-800 p-1">
-                    <!-- Targeted document buffers resolve here -->
-                </div>
+            <div class="bg-slate-800/40 border border-slate-800 rounded-xl overflow-hidden flex-1">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 bg-slate-800/80 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                            <th class="py-3.5 px-4 text-center w-16">Rank</th>
+                            <th class="py-3.5 px-4">Candidate</th>
+                            <th class="py-3.5 px-4">Matched Skills</th>
+                            <th class="py-3.5 px-4 text-right w-24">Match Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankingTableBody" class="divide-y divide-slate-800/60 text-sm">
+                        <tr>
+                            <td colspan="4" class="text-center py-20 text-xs text-slate-500 italic tracking-wide">
+                                Upload required documents and initiate analysis to populate data dashboards.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-
         </section>
 
-        <!-- RIGHT SIDEBAR: LLM CONVERSATIONAL WORKSPACE -->
-        <section class="w-1/4 bg-slate-900 border-l border-slate-800 flex flex-col justify-between overflow-hidden">
-            <!-- Workspace Stream Metadata Header -->
-            <div class="p-4 border-b border-slate-800 flex items-center space-x-2 bg-slate-950/20">
-                <div class="h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></div>
-                <h3 class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Context Memory | Gemini 2.5 Flash</h3>
+        <section class="w-1/4 bg-slate-800/50 border-l border-slate-800 flex flex-col justify-between overflow-hidden">
+            <div class="p-4 border-b border-slate-800 flex items-center space-x-2 bg-slate-800/30">
+                <div class="h-2 w-2 rounded-full bg-indigo-400 animate-pulse"></div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Gemini 2.5 Flash Assistant</h3>
             </div>
 
-            <!-- Terminal Messaging Window -->
-            <div id="chatContainer" class="flex-1 p-4 space-y-3 overflow-y-auto text-xs custom-scrollbar bg-slate-950/10">
-                <div class="bg-slate-900 border border-slate-800/80 text-slate-400 p-3 rounded-xl max-w-[90%] leading-relaxed">
-                    System initialized. Upload active candidate matrices to anchor contextual conversation records directly into the LLM logic layer.
+            <div id="chatContainer" class="flex-1 p-4 space-y-4 overflow-y-auto text-xs scrollbar-none">
+                <div class="bg-slate-800/80 text-slate-300 p-3 rounded-xl max-w-[85%] border border-slate-700/50">
+                    Hello! Once you connect your API key and upload candidate files, you can query me about specific skill profiles, comparative data, or matching rationale.
                 </div>
             </div>
 
-            <!-- Prompt Entry Pipeline -->
-            <div class="p-4 border-t border-slate-800 bg-slate-950/10">
-                <div class="flex items-center space-x-2 bg-slate-950 border border-slate-800 rounded-xl p-2 focus-within:border-indigo-600 transition-all">
-                    <input type="text" id="chatInput" placeholder="Interrogate structural applicant details..." class="bg-transparent text-xs w-full focus:outline-none text-slate-300 px-2 py-1" onkeypress="if(event.key === 'Enter') sendChatMessage()" />
-                    <button onclick="sendChatMessage()" class="bg-indigo-600 hover:bg-indigo-500 text-white p-1.5 rounded-lg transition-all active:scale-95 shrink-0">
+            <div class="p-4 border-t border-slate-800 bg-slate-800/20">
+                <div class="flex items-center space-x-2 bg-slate-900 border border-slate-700 rounded-xl p-2 focus-within:border-indigo-500 transition">
+                    <input type="text" id="chatInput" placeholder="Ask about applicant details..." class="bg-transparent text-xs w-full focus:outline-none text-slate-200 px-2 py-1" onkeypress="if(event.key === 'Enter') sendChatMessage()" />
+                    <button onclick="sendChatMessage()" class="bg-indigo-600 hover:bg-indigo-500 text-white p-1.5 rounded-lg transition active:scale-95">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </button>
                 </div>
@@ -159,149 +111,185 @@
         </section>
     </main>
 
-    <!-- CORE SCRIPTS & DEEP ARCHITECTURE -->
     <script type="module">
+        // Importing Google Gen AI SDK for client-side execution natively via ESM
         import { GoogleGenAI } from 'https://esm.run/@google/genai';
 
         let ai = null;
-        let globalContext = ""; 
-        window.uploadedResumes = []; // Global array monitoring the working memory state of local files
+        let globalContext = ""; // Keeps an index of the evaluated candidate metrics for the Chatbot
 
-        // 1. Establish Secure LLM Handshake Pipeline
         window.connectAPI = function() {
             const key = document.getElementById('apiKeyInput').value.trim();
             const indicator = document.getElementById('apiStatusIndicator');
             
             if(!key) {
-                alert("Provide valid API cryptographic key context.");
+                alert("Please enter a valid API key string.");
                 return;
             }
 
             try {
+                // Initialize the SDK with the provided API key
                 ai = new GoogleGenAI({ apiKey: key });
-                indicator.className = "h-2.5 w-2.5 rounded-full bg-green-500 glow-green";
-                appendChatMessage("System", "Handshake authorized. Client-side Gemini 2.5 Flash operational node created successfully.");
+                indicator.className = "h-3 w-3 rounded-full bg-green-500 glow-green";
+                appendChatMessage("System", "API key successfully linked. Gemini 2.5 Flash instance initialized.");
             } catch (err) {
-                indicator.className = "h-2.5 w-2.5 rounded-full bg-red-500";
+                indicator.className = "h-3 w-3 rounded-full bg-red-500";
+                alert("Initialization error. Check console log context.");
                 console.error(err);
             }
         }
 
-        // 2. Local State Sync Engine (UI updates)
         window.updateFileName = function(inputId, labelId) {
             const file = document.getElementById(inputId).files[0];
             if(file) document.getElementById(labelId).innerText = file.name;
         }
 
-        // 3. Document Array Tracking & List Projection UI
-        window.registerResumes = function() {
-            const fileInput = document.getElementById('resumeFiles');
-            const listContainer = document.getElementById('resumeList');
-            
-            // Append target input array directly into memory buffer
-            for (let file of fileInput.files) {
-                window.uploadedResumes.push(file);
-            }
-
-            listContainer.innerHTML = '';
-            
-            // Generate structural folder nodes for workspace preview routing
-            window.uploadedResumes.forEach((file, index) => {
-                const node = document.createElement('div');
-                node.className = "group flex items-center justify-between p-2 bg-slate-900 border border-slate-800/80 hover:border-indigo-500/40 rounded-lg cursor-pointer text-[11px] transition-all duration-200 select-none";
-                node.onclick = () => window.viewFile(index);
-                node.innerHTML = `
-                    <div class="flex items-center space-x-2 truncate pr-2">
-                        <svg class="w-3.5 h-3.5 text-slate-500 group-hover:text-indigo-400 shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <span class="text-slate-400 group-hover:text-slate-200 transition-colors truncate font-medium">${file.name}</span>
-                    </div>
-                    <span class="text-[9px] font-mono text-slate-600 shrink-0">${(file.size / 1024).toFixed(0)} KB</span>
-                `;
-                listContainer.appendChild(node);
-            });
-
-            document.getElementById('resumeCount').innerText = `${window.uploadedResumes.length} Document(s) Staged`;
+        window.updateResumeCount = function() {
+            const files = document.getElementById('resumeFiles').files;
+            document.getElementById('resumeCount').innerText = `${files.length} Resume(s) Attached`;
         }
 
-        // 4. Center Workspace Switching Interface (Live Rendering Framework)
-        window.viewFile = function(index) {
-            const file = window.uploadedResumes[index];
-            if(!file) return;
-
-            // Route workspace view layout nodes
-            document.getElementById('dashboardView').classList.add('hidden');
-            document.getElementById('previewView').classList.remove('hidden');
-            document.getElementById('previewTitle').innerText = file.name;
-
-            const targetCanvas = document.getElementById('previewContent');
-            targetCanvas.innerHTML = '';
-
-            // Render based on MIME type specifications natively
-            if (file.type === "application/pdf") {
-                const embeddedBlobUrl = URL.createObjectURL(file);
-                targetCanvas.innerHTML = `<iframe src="${embeddedBlobUrl}" class="w-full h-full rounded-lg bg-slate-950 border-0"></iframe>`;
-            } else {
-                // Read standard structural plaintext data streams natively
-                const stringReader = new FileReader();
-                stringReader.onload = function(e) {
-                    targetCanvas.innerHTML = `<pre class="w-full h-full overflow-auto p-4 bg-slate-950 text-slate-400 font-mono text-[11px] leading-relaxed whitespace-pre-wrap custom-scrollbar select-text">${e.target.result}</pre>`;
-                };
-                stringReader.readAsText(file);
-            }
-        }
-
-        window.showDashboard = function() {
-            document.getElementById('dashboardView').classList.remove('hidden');
-            document.getElementById('previewView').classList.add('hidden');
-        }
-
-        // 5. System Execution Pipeline (Matrix computation using Gemini 2.5 Flash)
         window.processApplications = async function() {
             if (!ai) {
-                alert("Mount and authorize server access credentials via active API connectivity map.");
+                alert("Please insert and connect your Gemini API Key before starting analysis.");
                 return;
             }
 
             const jdFile = document.getElementById('jdFile').files[0];
-            if(!jdFile || window.uploadedResumes.length === 0) {
-                alert("Platform require standard matching target reference rules (JD) and evaluation vectors (CVs) loaded.");
+            const resumes = document.getElementById('resumeFiles').files;
+
+            if(!jdFile || resumes.length === 0) {
+                alert("Please ensure both a job description and at least one resume have been staged.");
                 return;
             }
 
-            // Return focus to table dashboard structure
-            window.showDashboard();
             const tableBody = document.getElementById('rankingTableBody');
-            tableBody.innerHTML = `<tr class="flex w-full"><td class="w-full text-center py-32 text-indigo-400 animate-pulse font-medium tracking-wide">Executing Gemini token vector analysis matrices...</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-20 text-xs text-indigo-400 animate-pulse font-medium">Querying Gemini 2.5 Flash intelligence engines...</td></tr>`;
 
-            // Plaintext Fallback Extractors
-            const jdText = jdFile.name.endsWith('.txt') ? await jdFile.text() : `Target Matrix parameters derived from metadata structure: ${jdFile.name}`;
+            // Read the inputs (Fallback textual extraction for pure client-side environment)
+            const jdText = jdFile.name.endsWith('.txt') ? await jdFile.text() : `Job Title requirements based on context file: ${jdFile.name}`;
             
-            let datasetPayload = [];
-            for (let file of window.uploadedResumes) {
-                let contextSnapshot = file.name.endsWith('.txt') ? await file.text() : `Structural verification profiling parameters: ${file.name}`;
-                datasetPayload.push({ name: file.name.replace(/\.[^/.]+$/, ""), structuralBuffer: contextSnapshot });
+            let resumesData = [];
+            for (let file of resumes) {
+                let textContent = file.name.endsWith('.txt') ? await file.text() : `Extracted structural elements profile details for metadata validation name index matching: ${file.name}`;
+                resumesData.push({ name: file.name.replace(/\.[^/.]+$/, ""), tentativeContent: textContent });
             }
 
-            const strictSystemManifesto = `
-                You are a high-speed corporate ATS profiling core running matrix data evaluations. Contrast this JD blueprint against the Candidate structural array list.
+            // Constructing a strict system structure prompt for Gemini to return structured application data
+            const runtimePrompt = `
+                You are a high-fidelity ATS screening module. Analyze this Job Description and the corresponding batch of Candidate Profiles.
                 
-                [Target JD Context]
+                [Job Description Context]
                 ${jdText}
 
-                [Target Candidates Repository]
-                ${JSON.stringify(datasetPayload)}
+                [Candidate Resumes]
+                ${JSON.stringify(resumesData)}
 
-                Requirement: Evaluate structural intersections. Extract skill arrays matching constraints, calculate specific integer match percentages (0-100), and draft a single short insight string summarizing fit.
-                Output ONLY a parseable raw JSON Array matching exactly this schema map structure, with zero markdown text decorators or backticks:
-                [{"name": "Candidate Identity", "skills": ["SkillA", "SkillB"], "percentage": 92, "recommendation": "Short evaluation notes summary."}]
+                Task: Evaluate each candidate. Determine their key matched skills and assign a precise mathematical match percentage (0% to 100%) based entirely on alignment to the JD rules. Provide a 1-sentence recommendation insight.
+                Return ONLY a valid JSON Array of objects matching this scheme, with absolutely no markdown wrapping blocks or extra text:
+                [{"name": "Candidate Name", "skills": ["Skill1", "Skill2"], "percentage": 85, "recommendation": "Brief reason"}]
+            `;
+
+            try {
+                // Execute using the fast and lightweight gemini-2.5-flash model
+                const response = await ai.models.generateContent({
+                    model: 'gemini-2.5-flash',
+                    contents: runtimePrompt,
+                });
+
+                let rawText = response.text.trim();
+                // Strip markdown wrappers if returned by accident
+                if(rawText.startsWith("```json")) rawText = rawText.substring(7, rawText.length - 3);
+                if(rawText.startsWith("```")) rawText = rawText.substring(3, rawText.length - 3);
+
+                const rankedCandidates = JSON.parse(rawText.trim());
+                // Sort array natively by percentage match descending
+                rankedCandidates.sort((a,b) => b.percentage - a.percentage);
+
+                // Cache metrics context globally so the chat component has semantic visibility of ranking metrics
+                globalContext = JSON.stringify(rankedCandidates);
+
+                // Render Dashboard UI
+                document.getElementById('candidateTicker').innerText = `${rankedCandidates.length} Candidates Screened`;
+                tableBody.innerHTML = "";
+                
+                rankedCandidates.forEach((candidate, index) => {
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-slate-800/30 transition text-xs";
+                    row.innerHTML = `
+                        <td class="py-4 px-4 text-center font-bold text-slate-400">${index + 1}</td>
+                        <td class="py-4 px-4 font-semibold text-slate-200">
+                            <div>${candidate.name}</div>
+                            <div class="text-[10px] text-indigo-400 font-normal mt-0.5 max-w-xs truncate" title="${candidate.recommendation}">${candidate.recommendation}</div>
+                        </td>
+                        <td class="py-4 px-4">
+                            <div class="flex flex-wrap gap-1 max-w-xs">
+                                ${candidate.skills.map(s => `<span class="bg-slate-800 border border-slate-700/60 px-2 py-0.5 rounded text-[10px] text-slate-300">${s}</span>`).join('')}
+                            </div>
+                        </td>
+                        <td class="py-4 px-4 text-right font-bold text-emerald-400 text-sm">${candidate.percentage}%</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                appendChatMessage("System", "Analysis complete. Dashboard population successful.");
+
+            } catch (err) {
+                console.error(err);
+                tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-20 text-xs text-red-400">Failed parsing candidate profiles via API endpoint. Ensure API key configuration is active and valid.</td></tr>`;
+            }
+        }
+
+        window.sendChatMessage = async function() {
+            const inputEl = document.getElementById('chatInput');
+            const userText = inputEl.value.trim();
+            if(!userText) return;
+
+            if(!ai) {
+                alert("Please verify your API key connection state before activating chat utilities.");
+                return;
+            }
+
+            appendChatMessage("User", userText);
+            inputEl.value = "";
+
+            const chatPrompt = `
+                You are the backend workspace assistant for the ApexTalent ATS platform. 
+                Below is the structured matching context generated for the active candidate pool matching against the target job criteria:
+                ${globalContext}
+
+                Respond to this user inquiry intelligently based on the context above. Be concise and precise.
+                User Query: "${userText}"
             `;
 
             try {
                 const response = await ai.models.generateContent({
                     model: 'gemini-2.5-flash',
-                    contents: strictSystemManifesto,
+                    contents: chatPrompt,
                 });
+                appendChatMessage("Gemini", response.text.trim());
+            } catch (err) {
+                console.error(err);
+                appendChatMessage("Gemini Error", "Unable to stream generation response token contexts.");
+            }
+        }
 
-                let parsedText = response.text.trim();
-                if(parsedText.startsWith("```json")) parsedText = parsedText.substring(7, parsedText.length - 3);
-                if(parsedText.startsWith("
+        function appendChatMessage(sender, text) {
+            const container = document.getElementById('chatContainer');
+            const msgNode = document.createElement('div');
+            
+            if(sender === "User") {
+                msgNode.className = "bg-indigo-600 text-white p-3 rounded-xl max-w-[85%] ml-auto border border-indigo-500/30";
+            } else if (sender === "System") {
+                msgNode.className = "bg-slate-800/40 text-emerald-400 p-2 text-center rounded-lg border border-emerald-900/30 font-mono tracking-tight text-[10px]";
+            } else {
+                msgNode.className = "bg-slate-800/80 text-slate-300 p-3 rounded-xl max-w-[85%] border border-slate-700/50";
+            }
+            
+            msgNode.innerText = text;
+            container.appendChild(msgNode);
+            container.scrollTop = container.scrollHeight;
+        }
+    </script>
+</body>
+</html>
